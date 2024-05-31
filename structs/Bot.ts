@@ -27,7 +27,7 @@ export class Bot {
   public queues = new Collection<Snowflake, MusicQueue>();
 
   public constructor(public readonly client: Client) {
-    this.client.login(config.TOKEN);
+    this.client.login(process.env.BOT_TOKEN || config.TOKEN);
 
     this.client.on("ready", () => {
       console.log(`${this.client.user!.username} ready!`);
