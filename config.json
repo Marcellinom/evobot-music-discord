@@ -3,6 +3,6 @@
   "MAX_PLAYLIST_SIZE": 10,
   "PRUNING": false,
   "LOCALE": "en",
-  "STAY_TIME": 30,
+  "STAY_TIME": 5,
   "DEFAULT_VOLUME": 100
 }
