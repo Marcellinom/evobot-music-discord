@@ -1,29 +1,12 @@
-FROM node:18.18.2-slim as base
+FROM node:21-slim
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends python3 build-essential && \
-    apt-get purge -y --auto-remove && \
-    rm -rf /var/lib/apt/lists/*
+WORKDIR /usr/src/app
 
-RUN groupadd -r evobot && \
-    useradd --create-home --home /home/evobot -r -g evobot evobot
+COPY package*.json ./
 
-USER evobot
-WORKDIR /home/evobot
-
-FROM base as build
-
-COPY --chown=evobot:evobot  . .
 RUN npm ci
 RUN npm run build
 
-RUN rm -rf node_modules && \
-    npm ci --omit=dev
+COPY . ./
 
-FROM node:18.18.2-slim as prod
-
-COPY --chown=evobot:evobot package*.json ./
-COPY --from=build --chown=evobot:evobot /home/evobot/node_modules ./node_modules
-COPY --from=build --chown=evobot:evobot /home/evobot/dist ./dist
-
-CMD [ "node", "./dist/index.js" ]
+ENTRYPOINT [ "node", "index.js" ]
